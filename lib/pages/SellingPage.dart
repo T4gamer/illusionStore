@@ -9,7 +9,7 @@ class SalesPage extends StatelessWidget {
         backgroundColor: Color(0xFF212425),
         body: Column(
           children: [
-            paymentButton(buttonText: "text", icon: Icons.check,),
+            paymentButton(buttonText: "text", icon: Icons.check, color: Color(0xff3C3F41),),
           ],
         ));
   }
@@ -18,7 +18,8 @@ class SalesPage extends StatelessWidget {
 class paymentButton extends StatelessWidget {
   final String buttonText;
   final IconData icon;
-  const paymentButton({super.key, required this.buttonText, required this.icon});
+  final Color color;
+  const paymentButton({super.key, required this.buttonText, required this.icon, required this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +28,7 @@ class paymentButton extends StatelessWidget {
       height: 256,
       child: ElevatedButton(
         style: ButtonStyle(
-          backgroundColor:
-              MaterialStateProperty.all<Color>(const Color(0xFF3C3F41)),
+          backgroundColor: MaterialStateProperty.all<Color>(color),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(32),
