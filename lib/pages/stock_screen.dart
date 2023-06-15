@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'SellingPage.dart';
-
 class Stok extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -14,17 +12,23 @@ class Stok extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            first_row(),
+            firstRow(),
             SizedBox(
               height: 20,
             ),
-            second_row(),
+            secondRow(),
             SizedBox(
               height: 20,
             ),
-            third_row(),
-            SizedBox(height: 250,),
-            saveingButton(buttonText: "حفظ", icon: Icons.save, color: Color(0xFFFAF950),),
+            thirdRow(),
+            SizedBox(
+              height: 250,
+            ),
+            const SavingButton(
+              buttonText: "حفظ",
+              icon: Icons.save,
+              color: Color(0xFFFAF950),
+            ),
           ],
         ),
       ),
@@ -32,15 +36,20 @@ class Stok extends StatelessWidget {
   }
 }
 
-class saveingButton extends StatelessWidget {
+class SavingButton extends StatelessWidget {
   final String buttonText;
   final IconData icon;
   final Color color;
-  const saveingButton({super.key, required this.buttonText, required this.icon, required this.color});
+
+  const SavingButton(
+      {super.key,
+      required this.buttonText,
+      required this.icon,
+      required this.color});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 250,
       height: 100,
       child: ElevatedButton(
@@ -57,73 +66,86 @@ class saveingButton extends StatelessWidget {
             child: Column(
               children: [
                 // Icon(icon),
-                Text(buttonText,style: const TextStyle(color: Colors.black, fontSize: 44, fontWeight: FontWeight.bold),),
+                Text(
+                  buttonText,
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 44,
+                      fontWeight: FontWeight.bold),
+                ),
               ],
             ),
-          )
-      ),
+          )),
     );
   }
 }
 
-
-Widget first_row() {
-  return Column(
+Widget firstRow() {
+  return const Column(
     children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Container(
-            width: 400,
-            child: TextFormField(
-              textDirection: TextDirection.rtl,
+          SizedBox(
+            width: 544,
+            height: 72,
+            child: TextField(
               decoration: InputDecoration(
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 1, color: Colors.grey),
-                  borderRadius: BorderRadius.circular(20.0),
+                prefixIcon:
+                    Icon(Icons.qr_code_2, color: Colors.white, size: 32),
+                fillColor: Color(0xff3C3F41),
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32)),
+                  borderSide: BorderSide(color: Color(0xFF212425)),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 2, color: Color(0xFFFAF950)),
-                  borderRadius: BorderRadius.circular(20.0),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32)),
+                  borderSide: BorderSide(color: Color(0xFF212425)),
                 ),
               ),
-              style: TextStyle(color: Colors.white),
-              textInputAction: TextInputAction.next,
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: Text(
+              "باركود",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(
-            width: 30,
-          ),
-          Text("باركود", style: TextStyle(color: Colors.white)),
-          SizedBox(
-            width: 30,
-          ),
-          Container(
-            width: 400,
-            child: TextFormField(
+            width: 544,
+            height: 72,
+            child: TextField(
               textDirection: TextDirection.rtl,
               decoration: InputDecoration(
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 1, color: Colors.grey),
-                  borderRadius: BorderRadius.circular(20.0),
+                fillColor: Color(0xff3C3F41),
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32)),
+                  borderSide: BorderSide(color: Color(0xFF212425)),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 2, color: Color(0xFFFAF950)),
-                  borderRadius: BorderRadius.circular(20.0),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32)),
+                  borderSide: BorderSide(color: Color(0xFF212425)),
                 ),
               ),
-              style: TextStyle(color: Colors.white),
-              textInputAction: TextInputAction.next,
+              style:
+              TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(
-            width: 30,
-          ),
-          Text("الاسم", style: TextStyle(color: Colors.white)),
-          SizedBox(
-            width: 10,
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              "الاسم",
+              style: TextStyle(
+                  color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),
@@ -131,69 +153,89 @@ Widget first_row() {
   );
 }
 
-Widget second_row() {
+Widget secondRow() {
   bool isChecked = false;
   return Column(
     children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Container(
-            width: 200,
-            child: Row(
-              children: [
-                const Text("صندوق", style: TextStyle(color: Colors.white)),
-                Checkbox(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(6))),
-                  value: isChecked,
-                  onChanged: (value) => value,
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                const Text("قطعة", style: TextStyle(color: Colors.white)),
-                Checkbox(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(6))),
-                  value: isChecked,
-                  onChanged: (value) => value,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            width: 30,
-          ),
-          const Text("نوع الكمية", style: TextStyle(color: Colors.white)),
-          const SizedBox(
-            width: 30,
-          ),
-          Container(
-            width: 400,
-            child: TextFormField(
-              textDirection: TextDirection.rtl,
-              decoration: InputDecoration(
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 1, color: Colors.grey),
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 2, color: Color(0xFFFAF950)),
-                  borderRadius: BorderRadius.circular(20.0),
+          Row(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "صندوق",
+                  style: TextStyle(
+                      color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
-              style: TextStyle(color: Colors.white),
-              textInputAction: TextInputAction.next,
+              SizedBox(
+                height: 64,
+                width: 64,
+                child: Checkbox(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(6))),
+                  value: isChecked,
+                  onChanged: (value) => value,
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "قطعة",
+                  style: TextStyle(
+                      color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                height: 64,
+                width: 64,
+                child: Checkbox(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(6))),
+                  value: isChecked,
+                  onChanged: (value) => value,
+                ),
+              ),
+            ],
+          ),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              "نوع الكمية",
+              style: TextStyle(
+                  color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(
-            width: 30,
+            width: 544,
+            height: 72,
+            child: TextField(
+              textDirection: TextDirection.rtl,
+              decoration: InputDecoration(
+                fillColor: Color(0xff3C3F41),
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32)),
+                  borderSide: BorderSide(color: Color(0xFF212425)),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32)),
+                  borderSide: BorderSide(color: Color(0xFF212425)),
+                ),
+              ),
+              style:
+              TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
           ),
-          const Text("السعر", style: TextStyle(color: Colors.white)),
-          const SizedBox(
-            width: 10,
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              "السعر",
+              style: TextStyle(
+                  color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),
@@ -201,72 +243,68 @@ Widget second_row() {
   );
 }
 
-Widget third_row() {
-  return Column(
+Widget thirdRow() {
+  return const Column(
     children: [
       Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          SizedBox(width: 180,),
-          Container(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 200,
-                      child: TextFormField(
-                        textDirection: TextDirection.rtl,
-                        decoration: InputDecoration(
-                          floatingLabelBehavior: FloatingLabelBehavior.auto,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(width: 1, color: Colors.grey),
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 2, color: Color(0xFFFAF950)),
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                        ),
-                        style: TextStyle(color: Colors.white),
-                        textInputAction: TextInputAction.next,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 80,
-                    ),
-                    const Text("الكمية", style: TextStyle(color: Colors.white),),
-                  ],
+          SizedBox(
+            width: 544,
+            height: 72,
+            child: TextField(
+              textDirection: TextDirection.rtl,
+              decoration: InputDecoration(
+                fillColor: Color(0xff3C3F41),
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32)),
+                  borderSide: BorderSide(color: Color(0xFF212425)),
                 ),
-                SizedBox(height: 20,),
-                Row(
-                  children: [
-                    Container(
-                      width: 200,
-                      child: TextFormField(
-                        textDirection: TextDirection.rtl,
-                        decoration: InputDecoration(
-                          floatingLabelBehavior: FloatingLabelBehavior.auto,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(width: 1, color: Colors.grey),
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 2, color: Color(0xFFFAF950)),
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                        ),
-                        style: TextStyle(color: Colors.white),
-                        textInputAction: TextInputAction.next,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 30,
-                    ),
-                    const Text("قطة في الصندوق", style: TextStyle(color: Colors.white)),
-                  ],
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32)),
+                  borderSide: BorderSide(color: Color(0xFF212425)),
                 ),
-              ],
+              ),
+              style:
+              TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              "قطعة في الصندوق",
+              style: TextStyle(
+                  color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+          ),
+          SizedBox(
+            width: 544,
+            height: 72,
+            child: TextField(
+              textDirection: TextDirection.rtl,
+              decoration: InputDecoration(
+                fillColor: Color(0xff3C3F41),
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32)),
+                  borderSide: BorderSide(color: Color(0xFF212425)),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32)),
+                  borderSide: BorderSide(color: Color(0xFF212425)),
+                ),
+              ),
+              style:
+              TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              "الكمية",
+              style: TextStyle(
+                  color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
         ],

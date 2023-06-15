@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:illusionpos/pages/SellingPage.dart';
+import 'package:illusionpos/pages/receipt_list_screen.dart';
+import 'package:illusionpos/pages/selling_screen.dart';
 import 'package:illusionpos/pages/stock_screen.dart';
 
 void main() {
@@ -13,12 +14,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: Stok()
+      title: 'My App',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => SalesPage(),
+        '/receipt_list': (context) => ReceiptList(),
+        '/stok': (context) => Stok(),
+        '/sales_page': (context) => SalesPage(),
+      },
     );
   }
 }
