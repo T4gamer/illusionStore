@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/Product.dart';
 import '../services/product_service.dart';
+import '../services/temp_objects.dart';
 
 class AddProductProvider with ChangeNotifier {
   int _barcode = 0;
@@ -59,6 +60,7 @@ class AddProductProvider with ChangeNotifier {
       // piecesInBox: _piecesInBox,
       id: '',
     );
-    addProduct(_product);
+    // addProduct(_product); // add object to mongo db using product Service
+    TempObjectService("../models/temp.json").saveObject(_product);
   }
 }

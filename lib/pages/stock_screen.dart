@@ -1,36 +1,40 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:illusionpos/providers/add_product_provider.dart';
-final add_provider =AddProductProvider();
+import 'package:provider/provider.dart';
+
 class Stok extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Color(0xFF212425),
-        body: Column(
-          children: [
-            const SizedBox(
-              height: 30,
-            ),
-            firstRow(),
-            SizedBox(
-              height: 20,
-            ),
-            secondRow(),
-            SizedBox(
-              height: 20,
-            ),
-            thirdRow(),
-            SizedBox(
-              height: 250,
-            ),
-            const SavingButton(
-              buttonText: "حفظ",
-              icon: Icons.save,
-              color: Color(0xFFFAF950),
-            ),
-          ],
+    return ChangeNotifierProvider(
+      create: (_) => AddProductProvider(),
+      child: MaterialApp(
+        home: Scaffold(
+          backgroundColor: Color(0xFF212425),
+          body: Column(
+            children: [
+              const SizedBox(
+                height: 30,
+              ),
+              firstRow(),
+              SizedBox(
+                height: 20,
+              ),
+              secondRow(),
+              SizedBox(
+                height: 20,
+              ),
+              thirdRow(),
+              SizedBox(
+                height: 250,
+              ),
+              const SavingButton(
+                buttonText: "حفظ",
+                icon: Icons.save,
+                color: Color(0xFFFAF950),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -53,33 +57,39 @@ class SavingButton extends StatelessWidget {
     return SizedBox(
       width: 250,
       height: 100,
-      child: ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(color),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(32),
-              ),
-            ),
-          ),
-          onPressed: () {
-            add_provider.createProduct();
-            add_provider.clearFields();
-          },
-          child: Center(
-            child: Column(
-              children: [
-                // Icon(icon),
-                Text(
-                  buttonText,
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 44,
-                      fontWeight: FontWeight.bold),
+      child: Consumer<AddProductProvider>(
+        builder: (context, model, child) {
+          return ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(color),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(32),
+                  ),
                 ),
-              ],
-            ),
-          )),
+              ),
+              onPressed: () {
+                // add_provider.createProduct();
+                // add_provider.clearFields();
+                model.createProduct();
+                model.clearFields();
+              },
+              child: Center(
+                child: Column(
+                  children: [
+                    // Icon(icon),
+                    Text(
+                      buttonText,
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 44,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ));
+        }
+      ),
     );
   }
 }
@@ -93,26 +103,29 @@ Widget firstRow() {
           SizedBox(
             width: 544,
             height: 72,
-            child: TextField(
-              onChanged: (value) {
-                add_provider.setBarcode(int.parse(value));
-              },
-              decoration: const InputDecoration(
-                prefixIcon:
-                    Icon(Icons.qr_code_2, color: Colors.white, size: 32),
-                fillColor: Color(0xff3C3F41),
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32)),
-                  borderSide: BorderSide(color: Color(0xFF212425)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32)),
-                  borderSide: BorderSide(color: Color(0xFF212425)),
-                ),
-              ),
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            child: Consumer<AddProductProvider>(
+                builder:(context, model, child) {
+                  return TextField(
+                    onChanged: (value) => model.setBarcode(int.parse(value)),
+                    controller: TextEditingController()..text = model.barcode.toString(),
+                    decoration: const InputDecoration(
+                      prefixIcon:
+                      Icon(Icons.qr_code_2, color: Colors.white, size: 32),
+                      fillColor: Color(0xff3C3F41),
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32)),
+                        borderSide: BorderSide(color: Color(0xFF212425)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32)),
+                        borderSide: BorderSide(color: Color(0xFF212425)),
+                      ),
+                    ),
+                    style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  );
+                }
             ),
           ),
           const Padding(
@@ -128,25 +141,28 @@ Widget firstRow() {
            SizedBox(
             width: 544,
             height: 72,
-            child: TextField(
-              onChanged: (value) {
-                add_provider.setName(value);
-              },
-              textDirection: TextDirection.rtl,
-              decoration: const InputDecoration(
-                fillColor: Color(0xff3C3F41),
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32)),
-                  borderSide: BorderSide(color: Color(0xFF212425)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32)),
-                  borderSide: BorderSide(color: Color(0xFF212425)),
-                ),
-              ),
-              style:
-              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            child: Consumer<AddProductProvider>(
+              builder: (context, model,child) {
+                return TextField(
+                  onChanged: model.setName,
+                  controller: TextEditingController()..text = model.name.toString(),
+                  textDirection: TextDirection.rtl,
+                  decoration: const InputDecoration(
+                    fillColor: Color(0xff3C3F41),
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(32)),
+                      borderSide: BorderSide(color: Color(0xFF212425)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(32)),
+                      borderSide: BorderSide(color: Color(0xFF212425)),
+                    ),
+                  ),
+                  style:
+                  const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                );
+              }
             ),
           ),
           const Padding(
@@ -221,25 +237,29 @@ Widget secondRow() {
            SizedBox(
             width: 544,
             height: 72,
-            child: TextField(
-              onChanged: (value) {
-                add_provider.setPrice(double.parse(value));
-              },
-              textDirection: TextDirection.rtl,
-              decoration: const InputDecoration(
-                fillColor: Color(0xff3C3F41),
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32)),
-                  borderSide: BorderSide(color: Color(0xFF212425)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32)),
-                  borderSide: BorderSide(color: Color(0xFF212425)),
-                ),
-              ),
-              style:
-              TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            child: Consumer<AddProductProvider>(
+              builder: (context, model, child) {
+                return TextField(
+                  onChanged: (value) => model.setPrice(double.parse(value)),
+                  controller: TextEditingController()
+                    ..text = model.price.toString(),
+                  textDirection: TextDirection.rtl,
+                  decoration: const InputDecoration(
+                    fillColor: Color(0xff3C3F41),
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(32)),
+                      borderSide: BorderSide(color: Color(0xFF212425)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(32)),
+                      borderSide: BorderSide(color: Color(0xFF212425)),
+                    ),
+                  ),
+                  style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                );
+              }
             ),
           ),
           const Padding(
@@ -265,25 +285,29 @@ Widget thirdRow() {
           SizedBox(
             width: 544,
             height: 72,
-            child: TextField(
-              onChanged: (value) {
-                add_provider.setPiecesInBox(int.parse(value));
-              },
-              textDirection: TextDirection.rtl,
-              decoration: const InputDecoration(
-                fillColor: Color(0xff3C3F41),
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32)),
-                  borderSide: BorderSide(color: Color(0xFF212425)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32)),
-                  borderSide: BorderSide(color: Color(0xFF212425)),
-                ),
-              ),
-              style:
-              TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            child: Consumer<AddProductProvider>(
+              builder: (context, model, child) {
+                return TextField(
+                  onChanged: (value) => model.setPiecesInBox(int.parse(value)),
+                  controller: TextEditingController()
+                    ..text = model.piecesInBox.toString(),
+                  textDirection: TextDirection.rtl,
+                  decoration: const InputDecoration(
+                    fillColor: Color(0xff3C3F41),
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(32)),
+                      borderSide: BorderSide(color: Color(0xFF212425)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(32)),
+                      borderSide: BorderSide(color: Color(0xFF212425)),
+                    ),
+                  ),
+                  style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                );
+              }
             ),
           ),
           const Padding(
@@ -297,25 +321,29 @@ Widget thirdRow() {
           SizedBox(
             width: 544,
             height: 72,
-            child: TextField(
-              onChanged: (value) {
-                add_provider.setQuantity(int.parse(value));
-              },
-              textDirection: TextDirection.rtl,
-              decoration: const InputDecoration(
-                fillColor: Color(0xff3C3F41),
-                filled: true,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32)),
-                  borderSide: BorderSide(color: Color(0xFF212425)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32)),
-                  borderSide: BorderSide(color: Color(0xFF212425)),
-                ),
-              ),
-              style:
-              TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            child: Consumer<AddProductProvider>(
+              builder:(context, model, child) {
+                return TextField(
+                  onChanged: (value) => model.setQuantity(int.parse(value)),
+                  controller: TextEditingController()
+                    ..text = model.quantity.toString(),
+                  textDirection: TextDirection.rtl,
+                  decoration: const InputDecoration(
+                    fillColor: Color(0xff3C3F41),
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(32)),
+                      borderSide: BorderSide(color: Color(0xFF212425)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(32)),
+                      borderSide: BorderSide(color: Color(0xFF212425)),
+                    ),
+                  ),
+                  style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                );
+              }
             ),
           ),
           const Padding(
