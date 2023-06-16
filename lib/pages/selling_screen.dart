@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:illusionpos/providers/product_list_provider.dart';
+
+import '../models/Product.dart';
+
+final addProvider = ProductProvider();
 
 class SalesPage extends StatelessWidget {
   const SalesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
         backgroundColor: Color(0xFF212425),
         body: Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -14,9 +19,41 @@ class SalesPage extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    ElevatedButton(onPressed: () {
-
-                    }, child: Icon(Icons.chair_rounded)),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                        MaterialStateProperty.all<Color>(Color(0xff3C3F41)),
+                        shape:
+                        MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(32),
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, "/receipt_list");
+                      },
+                      child: Image.asset(
+                        "asset/receipt.png",
+                      ),
+                    ),
+                    ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Color(0xff3C3F41)),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(32),
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, "/stok");
+                        },
+                        child: Image.asset(
+                          "asset/add-items.png",
+                        )),
                     const Padding(
                       padding: EdgeInsets.fromLTRB(450, 0, 0, 0),
                       child: Text("طرق الدفع",
@@ -47,13 +84,14 @@ class SalesPage extends StatelessWidget {
                         height: 72,
                         child: TextField(
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.qr_code_2,color: Colors.white,size: 32),
+                            prefixIcon: Icon(Icons.qr_code_2,
+                                color: Colors.white, size: 32),
                             fillColor: Color(0xff3C3F41),
                             filled: true,
                             border: OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(32)),
-                              borderSide: BorderSide(color:Color(0xFF212425)),
+                              borderSide: BorderSide(color: Color(0xFF212425)),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius:
@@ -61,7 +99,8 @@ class SalesPage extends StatelessWidget {
                               borderSide: BorderSide(color: Color(0xFF212425)),
                             ),
                           ),
-                          style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Padding(
@@ -195,7 +234,9 @@ class FastAccessButton extends StatelessWidget {
                 ),
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              addProvider.addProduct(Product(id: "1", name: "زيت", price: 5, barcode: 12864118546464, quantity: 0));
+            },
             child: Column(
               children: [
                 Image.asset('asset/package.png'),
@@ -222,8 +263,6 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   @override
-  var items = [1];
-
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16),
@@ -241,15 +280,22 @@ class _CartState extends State<Cart> {
                     color: Colors.white,
                     fontSize: 32,
                     fontWeight: FontWeight.bold)),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
+            Expanded(
               child: Container(
-                height: 546,
                 width: 414,
-                child: ListView.builder(
-                  itemCount: items.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return CartItem();
+                child: StreamBuilder<List<Product>>(
+                  stream: addProvider.stream,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Container();
+                    }
+                    List<Product> products = snapshot.data!;
+                    return ListView.builder(
+                      itemCount: products.length,
+                      itemBuilder: (context, index) {
+                        return CartItem();
+                      },
+                    );
                   },
                 ),
               ),
@@ -270,20 +316,21 @@ class _CartState extends State<Cart> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 24),
-              child: SizedBox(
-                width: 384,
-                height: 68,
-                child: ElevatedButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color(0xffFAF950)),
-                    ),
-                    child: const Text("دفع",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 44,
-                            fontWeight: FontWeight.bold))),
+              child: Expanded(
+                child: Container(
+                  width: 384,
+                  child: ElevatedButton(
+                      onPressed: () {},
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            const Color(0xffFAF950)),
+                      ),
+                      child: const Text("دفع",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 44,
+                              fontWeight: FontWeight.bold))),
+                ),
               ),
             )
           ],
@@ -320,7 +367,9 @@ class CartItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      addProvider.removeAllProduct();
+                    },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
                           const Color(0xffF24E1E)),
@@ -340,7 +389,7 @@ class CartItem extends StatelessWidget {
                           fontWeight: FontWeight.bold)),
                 ),
                 const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
-                const Text("زيت الصفوة",
+                const Text("عصير",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,

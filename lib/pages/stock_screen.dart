@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:illusionpos/providers/add_product_provider.dart';
+final add_provider =AddProductProvider();
 class Stok extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -61,7 +62,10 @@ class SavingButton extends StatelessWidget {
               ),
             ),
           ),
-          onPressed: () {},
+          onPressed: () {
+            add_provider.createProduct();
+            add_provider.clearFields();
+          },
           child: Center(
             child: Column(
               children: [
@@ -81,7 +85,7 @@ class SavingButton extends StatelessWidget {
 }
 
 Widget firstRow() {
-  return const Column(
+  return Column(
     children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -90,7 +94,10 @@ Widget firstRow() {
             width: 544,
             height: 72,
             child: TextField(
-              decoration: InputDecoration(
+              onChanged: (value) {
+                add_provider.setBarcode(int.parse(value));
+              },
+              decoration: const InputDecoration(
                 prefixIcon:
                     Icon(Icons.qr_code_2, color: Colors.white, size: 32),
                 fillColor: Color(0xff3C3F41),
@@ -108,7 +115,7 @@ Widget firstRow() {
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.symmetric(horizontal: 8),
             child: Text(
               "باركود",
@@ -118,12 +125,15 @@ Widget firstRow() {
                   fontWeight: FontWeight.bold),
             ),
           ),
-          SizedBox(
+           SizedBox(
             width: 544,
             height: 72,
             child: TextField(
+              onChanged: (value) {
+                add_provider.setName(value);
+              },
               textDirection: TextDirection.rtl,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 fillColor: Color(0xff3C3F41),
                 filled: true,
                 border: OutlineInputBorder(
@@ -136,10 +146,10 @@ Widget firstRow() {
                 ),
               ),
               style:
-              TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(
               "الاسم",
@@ -208,12 +218,15 @@ Widget secondRow() {
                   color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
-          const SizedBox(
+           SizedBox(
             width: 544,
             height: 72,
             child: TextField(
+              onChanged: (value) {
+                add_provider.setPrice(double.parse(value));
+              },
               textDirection: TextDirection.rtl,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 fillColor: Color(0xff3C3F41),
                 filled: true,
                 border: OutlineInputBorder(
@@ -244,7 +257,7 @@ Widget secondRow() {
 }
 
 Widget thirdRow() {
-  return const Column(
+  return Column(
     children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -253,8 +266,11 @@ Widget thirdRow() {
             width: 544,
             height: 72,
             child: TextField(
+              onChanged: (value) {
+                add_provider.setPiecesInBox(int.parse(value));
+              },
               textDirection: TextDirection.rtl,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 fillColor: Color(0xff3C3F41),
                 filled: true,
                 border: OutlineInputBorder(
@@ -270,7 +286,7 @@ Widget thirdRow() {
               TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(
               "قطعة في الصندوق",
@@ -282,8 +298,11 @@ Widget thirdRow() {
             width: 544,
             height: 72,
             child: TextField(
+              onChanged: (value) {
+                add_provider.setQuantity(int.parse(value));
+              },
               textDirection: TextDirection.rtl,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 fillColor: Color(0xff3C3F41),
                 filled: true,
                 border: OutlineInputBorder(
@@ -299,7 +318,7 @@ Widget thirdRow() {
               TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(
               "الكمية",
