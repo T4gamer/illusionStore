@@ -1,19 +1,23 @@
+import 'dart:math';
+
 import 'package:uuid/uuid.dart';
 
 class Product {
   final String id;
   final String name;
-  final double price;
+  double price;
   final int barcode;
-  final int quantity;
+  int quantity;
 
   Product(
-      {String? id,
+      {
+        String? id,
         required this.name,
         required this.price,
-        required this.barcode,
+        int? barcode,
         required this.quantity}
-      ) : id = (id == null || id.isEmpty) ? Uuid().v4() : id;
+      ) : id = (id == null || id.isEmpty) ? Uuid().v4() : id,
+        barcode = (barcode == null || barcode == 0) ? Random().nextInt(1000000000) : barcode;
 
 
   factory Product.fromJson(Map<String, dynamic> json) {

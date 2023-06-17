@@ -235,7 +235,7 @@ class FastAccessButton extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              addProvider.addProduct(Product(id: "1", name:  buttonText , price: price, barcode: 12864118546464, quantity: 1));
+              addProvider.addProduct(Product(name:  buttonText , price: price, barcode: 12864118546464, quantity: 1));
             },
             child: Column(
               children: [
@@ -299,7 +299,7 @@ class _CartState extends State<Cart> {
         ),
         child: Column(
           children: [
-            Text("سلة المشتريات",
+            const Text("سلة المشتريات",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 32,
@@ -315,6 +315,7 @@ class _CartState extends State<Cart> {
                     }
                     List<Product> products = snapshot.data!;
                     return ListView.builder(
+                      controller: addProvider.scrollController,
                       itemCount: products.length,
                       itemBuilder: (context, index) {
                         return CartItem(name: products[index].name,price: products[index].price,index: index,);
@@ -355,7 +356,10 @@ class _CartState extends State<Cart> {
                 child:
                 ElevatedButton(
                     onPressed:
-                        () {},
+                        () {
+                      addProvider.saveReceipt();
+                      addProvider.removeAllProduct();
+                        },
                     style:
                     ButtonStyle(
                       backgroundColor:
