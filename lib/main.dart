@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:illusionpos/pages/receipt_list_screen.dart';
 import 'package:illusionpos/pages/selling_screen.dart';
 import 'package:illusionpos/pages/stock_screen.dart';
+import 'package:illusionpos/providers/product_list_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => ProductProvider()),
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -14,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'My App',
+      title: 'IllusionPos',
       initialRoute: '/',
       routes: {
         '/': (context) => SalesPage(),

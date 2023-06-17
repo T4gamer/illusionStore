@@ -1,15 +1,31 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:path/path.dart' as path;
+
 
 import '../models/Product.dart';
 
 class TempObjectService {
-  final String _filePath;
+  static const String _fileName = 'temp.json';
+  static final String _filePath = path.join(
+    Directory.current.path,
+    'models',
+    _fileName,
+  );
+  static TempObjectService? _instance;
 
-  TempObjectService(this._filePath);
+  factory TempObjectService() {
+    if (_instance == null) {
+      _instance = TempObjectService._internal();
+    }
+    return _instance!;
+  }
+
+  TempObjectService._internal();
 
   Future<void> saveObject(Product tempObject) async {
     final file = File(_filePath);
+    print(tempObject.toJson());
     final json = jsonEncode(tempObject.toJson());
     await file.writeAsString(json + '\n', mode: FileMode.append);
   }

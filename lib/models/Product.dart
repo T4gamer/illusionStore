@@ -13,7 +13,7 @@ class Product {
         required this.price,
         required this.barcode,
         required this.quantity}
-      ) : id = id ?? Uuid().v4();
+      ) : id = (id == null || id.isEmpty) ? Uuid().v4() : id;
 
 
   factory Product.fromJson(Map<String, dynamic> json) {

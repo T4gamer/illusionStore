@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/Product.dart';
-import '../services/product_service.dart';
-import '../services/temp_objects.dart';
+import '../services/APIConnection.dart';
 
 class AddProductProvider with ChangeNotifier {
   int _barcode = 0;
@@ -51,7 +50,7 @@ class AddProductProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void createProduct() {
+  Future<void> createProduct() async {
     final _product = Product(
       barcode: _barcode,
       name: _name,
@@ -61,6 +60,11 @@ class AddProductProvider with ChangeNotifier {
       id: '',
     );
     // addProduct(_product); // add object to mongo db using product Service
-    TempObjectService("../models/temp.json").saveObject(_product);
+    try {
+      await ProductAPI.instance.createProduct(_product.toJson());
+      print("Product created successfully!");
+    } catch (e) {
+      print("Failed to create product: $e");
+    }
   }
 }

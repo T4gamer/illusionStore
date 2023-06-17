@@ -1,29 +1,70 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:illusionpos/services/APIConnection.dart';
 import '../models/Product.dart';
 
 class ProductProvider with ChangeNotifier {
   StreamController<List<Product>> _streamController =
   StreamController<List<Product>>();
   Stream<List<Product>> get stream => _streamController.stream;
-
+  double _totalPrice = 0;
+  double get totalPrice => _totalPrice;
   List<Product> _products = [];
   List<Product> get products => _products;
 
+  TextEditingController _controller = TextEditingController();
+  String _text = '';
+
+  TextEditingController get controller => _controller;
+  String get text => _text;
+
+
+  List<Map<String, dynamic>> _searchResults = [];
+
+  List<Map<String, dynamic>> get searchResults => _searchResults;
+
+  Future<void> onSubmitted(String value) async {
+    final Product scaned = await Searchbarcode(value);
+    if(scaned != null){
+      addProduct(scaned);
+      notifyListeners();
+    }
+    notifyListeners();
+  }
+
+  Future<Product> Searchbarcode(String value) async {
+    _text = value;
+    final searchQuery = {"barcode": int.parse(value)};
+    _searchResults = await ProductAPI.instance.searchProducts(searchQuery);
+    final Product result = Product.fromJson(searchResults.first);
+    notifyListeners();
+    return result;
+  }
+
   void addProduct(Product product) {
+    _totalPrice += product.price;
     _products.add(product);
     _streamController.add(_products);
     notifyListeners();
   }
 
   void removeProduct(Product product) {
+    _totalPrice -= product.price;
     _products.remove(product);
     _streamController.add(_products);
     notifyListeners();
   }
   void removeAllProduct() {
+    _totalPrice = 0;
     _products.clear();
+    _streamController.add(_products);
+    notifyListeners();
+  }
+  
+  void removeProductAt(index) {
+    _totalPrice -= products[index].price;
+    _products.removeAt(index);
     _streamController.add(_products);
     notifyListeners();
   }

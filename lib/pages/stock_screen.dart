@@ -71,7 +71,11 @@ class SavingButton extends StatelessWidget {
               onPressed: () {
                 // add_provider.createProduct();
                 // add_provider.clearFields();
+                final snackBar = SnackBar(
+                  content: Text('تم حقظ المنتج'),
+                );
                 model.createProduct();
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 model.clearFields();
               },
               child: Center(
@@ -95,6 +99,8 @@ class SavingButton extends StatelessWidget {
 }
 
 Widget firstRow() {
+  final TextEditingController _controllerBarcode = TextEditingController();
+  final TextEditingController _controllerName = TextEditingController();
   return Column(
     children: [
       Row(
@@ -105,9 +111,10 @@ Widget firstRow() {
             height: 72,
             child: Consumer<AddProductProvider>(
                 builder:(context, model, child) {
+                  _controllerBarcode.text = model.barcode.toString();
                   return TextField(
                     onChanged: (value) => model.setBarcode(int.parse(value)),
-                    controller: TextEditingController()..text = model.barcode.toString(),
+                    controller: _controllerBarcode,
                     decoration: const InputDecoration(
                       prefixIcon:
                       Icon(Icons.qr_code_2, color: Colors.white, size: 32),
@@ -143,9 +150,10 @@ Widget firstRow() {
             height: 72,
             child: Consumer<AddProductProvider>(
               builder: (context, model,child) {
+                _controllerName.text = model.name.toString();
                 return TextField(
                   onChanged: model.setName,
-                  controller: TextEditingController()..text = model.name.toString(),
+                  controller: _controllerName,
                   textDirection: TextDirection.rtl,
                   decoration: const InputDecoration(
                     fillColor: Color(0xff3C3F41),
@@ -181,6 +189,7 @@ Widget firstRow() {
 
 Widget secondRow() {
   bool isChecked = false;
+  final TextEditingController _controllerPrice = TextEditingController();
   return Column(
     children: [
       Row(
@@ -239,10 +248,10 @@ Widget secondRow() {
             height: 72,
             child: Consumer<AddProductProvider>(
               builder: (context, model, child) {
+                _controllerPrice.text = model.price.toString();
                 return TextField(
                   onChanged: (value) => model.setPrice(double.parse(value)),
-                  controller: TextEditingController()
-                    ..text = model.price.toString(),
+                  controller: _controllerPrice,
                   textDirection: TextDirection.rtl,
                   decoration: const InputDecoration(
                     fillColor: Color(0xff3C3F41),
@@ -277,6 +286,9 @@ Widget secondRow() {
 }
 
 Widget thirdRow() {
+  final TextEditingController _controllerPiece = TextEditingController();
+  final TextEditingController _controllerBox = TextEditingController();
+
   return Column(
     children: [
       Row(
@@ -287,10 +299,10 @@ Widget thirdRow() {
             height: 72,
             child: Consumer<AddProductProvider>(
               builder: (context, model, child) {
+                _controllerBox.text = model.piecesInBox.toString();
                 return TextField(
                   onChanged: (value) => model.setPiecesInBox(int.parse(value)),
-                  controller: TextEditingController()
-                    ..text = model.piecesInBox.toString(),
+                  controller: _controllerBox,
                   textDirection: TextDirection.rtl,
                   decoration: const InputDecoration(
                     fillColor: Color(0xff3C3F41),
@@ -323,10 +335,10 @@ Widget thirdRow() {
             height: 72,
             child: Consumer<AddProductProvider>(
               builder:(context, model, child) {
+                _controllerPiece.text = model.quantity.toString();
                 return TextField(
                   onChanged: (value) => model.setQuantity(int.parse(value)),
-                  controller: TextEditingController()
-                    ..text = model.quantity.toString(),
+                  controller: _controllerPiece,
                   textDirection: TextDirection.rtl,
                   decoration: const InputDecoration(
                     fillColor: Color(0xff3C3F41),
